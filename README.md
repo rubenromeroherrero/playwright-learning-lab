@@ -54,7 +54,7 @@ playwright-learning-lab/
 
 ⚙️2. Instalación de Dependencias
 1. Requisitos Previos
-Clona el repositorio e instala las dependencias del proyecto
+- Clona el repositorio e instala las dependencias del proyecto
 ```text
 # Clonar el repositorio
 git clone <URL_DE_TU_REPOSITORIO>
