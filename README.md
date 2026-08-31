@@ -1,2 +1,126 @@
-# playwright-learning-lab
-A personal project to practice and explore Playwright for end-to-end testing of web applications. Includes examples, experiments, and exercises aimed at improving testing skills.
+# 🧪 Playwright Learning Lab
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Playwright-45ba4b?style=for-the-badge&logo=Playwright&logoColor=white" alt="Playwright" />
+  <img src="https://img.shields.io/badge/Cucumber-23D96C?style=for-the-badge&logo=Cucumber&logoColor=white" alt="Cucumber" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+</p>
+
+Repositorio práctico de laboratorio y aprendizaje dedicado a la automatización de pruebas end-to-end (E2E) con **Playwright**, **TypeScript** e integración **BDD (Behavior-Driven Development)** mediante **Cucumber**.
+
+---
+
+## 🎯 Objetivo del Repositorio
+
+El propósito de este proyecto es servir como un espacio de práctica y referencia para:
+- Aprender y experimentar con las funcionalidades fundamentales de **Playwright**.
+- Implementar arquitecturas de automatización BDD utilizando **Cucumber (Gherkin)**.
+- Resolver casos de uso reales de pruebas web (localizadores, acciones, aserciones y manejo de contextos).
+- Integrar ejecuciones nativas de Playwright y ejecuciones basadas en escenarios BDD.
+
+---
+
+## 🛠️ Tecnologías e Herramientas
+
+- **Core:** [Playwright Test](https://playwright.dev/)
+- **Lenguaje:** TypeScript
+- **Framework BDD:** `@cucumber/cucumber`
+- **Runner TypeScript:** `tsx`
+- **Reportes:** Playwright HTML Report & Cucumber HTML Reporter
+
+---
+
+## 📁 Estructura del Proyecto
+
+```text
+playwright-learning-lab/
+├── tests/
+│   ├── features/                   # Escenarios BDD
+│   │   ├── step-definitions/       # Definición de pasos (Gherkin -> TS)
+│   │   ├── support/                # Hooks y gestión del navegador Playwright
+│   │   └── *.feature               # Archivos de historias/escenarios Gherkin
+│   ├── pages/                      # Page Object Models (POM)
+│   └── *.spec.ts                   # Pruebas nativas con Playwright Test Runner
+├── cucumber.json                   # Configuración del CLI de Cucumber
+├── playwright.config.ts            # Configuración global de Playwright
+└── package.json
+````
+
+##  🚀 Guía de Inicio Rápido
+💻1. Requisitos Previos
+- Node.js (versión 18 o superior)
+- VS Code (recomendado, con las extensiones de Playwright y Cucumber)
+
+⚙️2. Instalación de Dependencias
+1. Requisitos Previos
+Clona el repositorio e instala las dependencias del proyecto
+```text
+# Clonar el repositorio
+git clone <URL_DE_TU_REPOSITORIO>
+
+# Entrar a la carpeta del proyecto
+cd playwright-learning-lab
+
+# Instalar dependencias de Node
+npm install
+
+# Instalar los navegadores de Playwright
+npx playwright install
+````
+
+ℹ️Nota: Si estás inicializando este proyecto desde cero, el comando inicial de Playwright fue:
+```text
+npm init playwright@latest
+````
+---
+
+##  ⚙️ Configuración BDD (Playwright + Cucumber)
+Para integrar Cucumber sobre el proyecto de Playwright se agregaron los paquetes @cucumber/cucumber y tsx. La ejecución se gestiona mediante el archivo cucumber.json:
+```text
+{
+  "default": {
+    "paths": ["tests/features/**/*.feature"],
+    "require": ["tests/features/step-definitions/**/*.ts", "tests/features/support/**/*.ts"],
+    "requireModule": ["tsx"],
+    "format": ["progress-bar", "html:cucumber-report.html"]
+  }
+}
+````
+
+Extensión de VS Code
+Para habilitar el salto de definiciones (Ctrl + Clic / F12) en los archivos .feature, añade lo siguiente a tu .vscode/settings.json:
+```text
+{
+  "cucumber.features": ["tests/features/**/*.feature"],
+  "cucumber.glue": ["tests/features/step-definitions/**/*.ts"]
+}
+````
+
+##  🧪 Comandos de Ejecución
+Pruebas Nativas de Playwright
+```text
+# Ejecutar todas las pruebas nativas en modo headless
+npx playwright test
+
+# Ejecutar con interfaz gráfica (UI Mode)
+npx playwright test --ui
+
+# Ver reporte de Playwright
+npx playwright show-report
+````
+
+Pruebas BDD con Cucumber
+```text
+# Ejecutar todas las features de Cucumber
+npm run test:cucumber
+
+# Ejecutar escenarios filtrados por etiqueta (Ejemplo: @test)
+npm run test:cucumber -- --tags "@test"
+
+# Ejecutar un archivo .feature específico
+npm run test:cucumber -- tests/features/homepage.feature
+````
+
+##  📝 Licencia
+Proyecto creado con fines educativos y de aprendizaje personal.
