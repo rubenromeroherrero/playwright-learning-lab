@@ -65,7 +65,7 @@ use: {
 - VS Code (recomendado, con las extensiones de Playwright y Cucumber)
 
 ⚙️2. Instalación de Dependencias
-1. Requisitos Previos
+Requisitos Previos:
 - Clona el repositorio e instala las dependencias del proyecto
 ```text
 # Clonar el repositorio
@@ -91,12 +91,26 @@ npm init playwright@latest
 Para integrar Cucumber sobre el proyecto de Playwright se agregaron los paquetes @cucumber/cucumber y tsx. La ejecución se gestiona mediante el archivo cucumber.json:
 ```text
 {
-  "default": {
-    "paths": ["tests/features/**/*.feature"],
-    "require": ["tests/features/step-definitions/**/*.ts", "tests/features/support/**/*.ts"],
-    "requireModule": ["tsx"],
-    "format": ["progress-bar", "html:cucumber-report.html"]
-  }
+    "default": {
+        "formatOptions": {
+            "snippetInterface": "async-await"
+        },
+        "paths": [
+            "tests/features/**/*.feature"
+        ],
+        "require": [
+            "tests/features/step-definitions/**/*.ts",
+            "tests/features/support/**/*.ts"
+        ],
+        "requireModule": [
+            "tsx"
+        ],
+        "format": [
+            "progress-bar",
+            "html:reports/cucumber-report.html",
+            "json:reports/cucumber-report.json"
+        ]
+    }
 }
 ````
 
@@ -105,11 +119,12 @@ Por otro lado, se creó un fichero hooks.ts donde se gestionó:
 - La configuración del timeout global para los tests
 - El seteo del atributo de los data-testid, por 'data-test'
 ```text
-import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
-import { ChromiumBrowser, Page, chromium } from '@playwright/test';
+import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } from '@cucumber/cucumber';
+import { ChromiumBrowser, Page, chromium, selectors } from '@playwright/test';
+import config from '../../../playwright.config.ts';
 
 // Configura el timeout global para todos los pasos (ejemplo: 20 segundos)
-setDefaultTimeout(20 * 1000);
+setDefaultTimeout(8 * 1000);
 
 let browser: ChromiumBrowser;
 let page: Page;
@@ -117,12 +132,18 @@ let page: Page;
 // Dado que Cucumber controlará la ejecución en lugar del runner de Playwright, debemos abrir y cerrar el navegador manualmente en un archivo de soporte.
 // Se ejecuta una sola vez antes de todas las pruebas
 BeforeAll(async () => {
+  // Configura el atributo global para getByTestId
+  selectors.setTestIdAttribute(config.use?.testIdAttribute || 'data-test');
   browser = await chromium.launch({ headless: false }); // Cambia a true en CI/CD
 });
 
 // Se ejecuta antes de CADA escenario
 Before(async function () {
-  const context = await browser.newContext();
+  //const context = await browser.newContext();
+  const context = await browser.newContext({
+    //Configurar la URL de pruebas
+    baseURL: config.use?.baseURL
+  });
   this.page = await context.newPage(); // Guardamos 'page' en el contexto de Cucumber (this)
 });
 
@@ -140,6 +161,7 @@ After(async function (scenario) {
 AfterAll(async () => {
   await browser.close();
 });
+
 ````
 
 ℹ️ Extensión de VS Code
