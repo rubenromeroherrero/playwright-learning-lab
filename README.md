@@ -49,8 +49,8 @@ playwright-learning-lab/
 
 ##  ⚙️ Configuración Global de Playwright
 En el archivo playwright.config.ts se han definido ajustes globales clave para agilizar el desarrollo de las pruebas:
-- baseURL: Se define la URL base (https://www.saucedemo.com/) para poder utilizar rutas relativas (como await page.goto('/')) y evitar declararla manualmente en cada step o test.
-- testIdAttribute: Se renombra el identificador de test por defecto de Playwright a data-test (testIdAttribute: 'data-test'), adaptándolo al atributo utilizado por el sitio web bajo prueba en lugar del estándar data-testid.
+- baseURL: Se define la URL base (https://www.saucedemo.com/) para utilizar rutas relativas (como await page.goto('/')) sin declararla manualmente en cada step o test.
+- testIdAttribute: Se adapta el identificador de test por defecto a data-test (testIdAttribute: 'data-test'), ajustándose al atributo utilizado por la aplicación bajo prueba.
 ```text
 // playwright.config.ts (extracto)
 use: {
@@ -88,36 +88,36 @@ npm init playwright@latest
 ---
 
 ##  ⚙️ Configuración BDD (Playwright + Cucumber)
-Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no mediante el runner nativo de Playwright, se requiere la integración de tsx (TypeScript Execute) para transpilar e interpretar los archivos .ts al vuelo sin necesidad de un paso previo de compilación (tsc).
+Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no mediante el runner nativo de Playwright, se requiere la integración de tsx (TypeScript Execute) para transpilar e interpretar los archivos .ts al vuelo sin necesidad de compilación previa.
 - @cucumber/cucumber: Framework encargado de parsear las características Gherkin (.feature) y mapear los pasos a código TypeScript.
-- tsx: Cargador de módulos registrado dentro de la configuración de Cucumber mediante la propiedad requireModule, lo que permite ejecutar directamente los step definitions y hooks escritos en TypeScript.
+- tsx: Cargador de módulos registrado dentro de cucumber.json mediante la propiedad requireModule.
 
 ```text
 {
-    "default": {
-        "formatOptions": {
-            "snippetInterface": "async-await"
-        },
-        "paths": [
-            "tests/features/**/*.feature"
-        ],
-        "require": [
-            "tests/features/step-definitions/**/*.ts",
-            "tests/features/support/**/*.ts"
-        ],
-        "requireModule": [
-            "tsx"
-        ],
-        "format": [
-            "progress-bar",
-            "html:reports/cucumber-report.html",
-            "json:reports/cucumber-report.json"
-        ]
-    }
+  "default": {
+    "formatOptions": {
+      "snippetInterface": "async-await"
+    },
+    "paths": [
+      "tests/features/**/*.feature"
+    ],
+    "require": [
+      "tests/features/step-definitions/**/*.ts",
+      "tests/features/support/**/*.ts"
+    ],
+    "requireModule": [
+      "tsx"
+    ],
+    "format": [
+      "progress-bar",
+      "html:reports/cucumber-report.html",
+      "json:reports/cucumber-report.json"
+    ]
+  }
 }
 ````
 
-Por otro lado, se creó un fichero hooks.ts donde se gestionó: 
+##  🖥️ Gestión del Ciclo de Vida (tests/features/support/hooks.ts)
 - El ciclo de vida del navegador
 - La configuración del timeout global para los tests
 - El seteo del atributo de los data-testid, por 'data-test'
@@ -208,6 +208,16 @@ npm run test:cucumber -- tests/features/homepage.feature
 npx playwright codegen urlToNavigate
 
 # Pausar la ejecución
+await this.page.pause();
+````
+
+##  🧑‍💻Herramientas de Desarrollo y Depuración
+```text
+# Generar localizadores e interactuar con la web (Playwright Codegen)
+npx playwright codegen urlToNavigate
+````
+ℹ️ Nota: Durante la depuración puedes pausar la ejecución en el código agregando:
+```text
 await this.page.pause();
 ````
 
