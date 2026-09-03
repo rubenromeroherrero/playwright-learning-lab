@@ -9,4 +9,5 @@ node_modules/
 /guia_playwright_cucumber_setup.pdf
 /cucumber-report.html
 /cucumber.json
+/reports
 .env

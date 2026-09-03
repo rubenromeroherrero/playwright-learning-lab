@@ -29,7 +29,7 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
     baseURL: 'https://www.saucedemo.com/',
     // Configuración del nombre de los data-testid que quieran poner en el proyecto los devs
-    // testIdAttribute: 'pw-id'
+    testIdAttribute: 'data-test',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },

@@ -15,7 +15,7 @@ await test.info().attach('screenshot, {}) -> AÃ±adimos una captura a la ejecuciÃ
 */
 
 /*
-Se puede sustituir page.goto
+Se puede sustituir page.goto('www.ejemplo.com') por page.goto(''), ya que lo lee del archivo config.ts
     // Se puede sustituir este step directamente en el fichero playwright.config.ts > baseURL: 'https://www.saucedemo.com/'
 */
 

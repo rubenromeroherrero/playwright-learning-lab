@@ -1,9 +1,9 @@
 Feature: Todo App Functionality
 
     #npm run test:cucumber
-    #npm run test:cucumber -- --tags "@test"
+    #npm run test:cucumber -- --tags "@test1"
 
-    @test
+    @test1
     Scenario: Select an item
 
         Given the user navigates to the Free Range Testers Sandbox

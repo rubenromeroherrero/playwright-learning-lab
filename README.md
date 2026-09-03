@@ -36,15 +36,27 @@ El propósito de este proyecto es servir como un espacio de práctica y referenc
 ```text
 playwright-learning-lab/
 ├── tests/
-│   ├── features/                   # Escenarios BDD
-│   │   ├── step-definitions/       # Definición de pasos (Gherkin -> TS)
-│   │   ├── support/                # Hooks y gestión del navegador Playwright
-│   │   └── *.feature               # Archivos de historias/escenarios Gherkin
-│   ├── pages/                      # Page Object Models (POM)
-│   └── *.spec.ts                   # Pruebas nativas con Playwright Test Runner
-├── cucumber.json                   # Configuración del CLI de Cucumber
-├── playwright.config.ts            # Configuración global de Playwright
+│   ├── features/                # Escenarios BDD
+│   │   ├── step-definitions/    # Definición de pasos (Gherkin -> TS)
+│   │   ├── support/             # Hooks y gestión del navegador Playwright
+│   │   └── *.feature            # Archivos de historias/escenarios Gherkin
+│   ├── pages/                   # Page Object Models (POM)
+│   └── *.spec.ts                # Pruebas nativas con Playwright Test Runner
+├── cucumber.json                # Configuración del CLI de Cucumber
+├── playwright.config.ts         # Configuración global de Playwright
 └── package.json
+````
+
+##  ⚙️ Configuración Global de Playwright
+En el archivo playwright.config.ts se han definido ajustes globales clave para agilizar el desarrollo de las pruebas:
+- baseURL: Se define la URL base (https://www.saucedemo.com/) para poder utilizar rutas relativas (como await page.goto('/')) y evitar declararla manualmente en cada step o test.
+- testIdAttribute: Se renombra el identificador de test por defecto de Playwright a data-test (testIdAttribute: 'data-test'), adaptándolo al atributo utilizado por el sitio web bajo prueba en lugar del estándar data-testid.
+```text
+// playwright.config.ts (extracto)
+use: {
+  baseURL: 'https://www.saucedemo.com',
+  testIdAttribute: 'data-test',
+}
 ````
 
 ##  🚀 Guía de Inicio Rápido
@@ -88,10 +100,16 @@ Para integrar Cucumber sobre el proyecto de Playwright se agregaron los paquetes
 }
 ````
 
-Además, se tuvo que crear un fichero hooks.ts.
+Por otro lado, se creó un fichero hooks.ts donde se gestionó: 
+- El ciclo de vida del navegador
+- La configuración del timeout global para los tests
+- El seteo del atributo de los data-testid, por 'data-test'
 ```text
 import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
 import { ChromiumBrowser, Page, chromium } from '@playwright/test';
+
+// Configura el timeout global para todos los pasos (ejemplo: 20 segundos)
+setDefaultTimeout(20 * 1000);
 
 let browser: ChromiumBrowser;
 let page: Page;
@@ -124,7 +142,7 @@ AfterAll(async () => {
 });
 ````
 
-Extensión de VS Code
+ℹ️ Extensión de VS Code
 Para habilitar el salto de definiciones (Ctrl + Clic / F12) en los archivos .feature, añade lo siguiente a tu .vscode/settings.json:
 ```text
 {
@@ -156,6 +174,12 @@ npm run test:cucumber -- --tags "@test"
 
 # Ejecutar un archivo .feature específico
 npm run test:cucumber -- tests/features/homepage.feature
+
+# Ejecutar un fichero cucumber y extraer los identificadores/localizadores: 
+npx playwright codegen urlToNavigate
+
+# Pausar la ejecución
+await this.page.pause();
 ````
 
 ##  📝 Licencia
