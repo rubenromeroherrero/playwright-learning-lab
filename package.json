@@ -1,0 +1,28 @@
+{
+  "name": "playwright-learning-lab",
+  "version": "1.0.0",
+  "description": "A personal project to practice and explore Playwright for end-to-end testing of web applications. Includes examples, experiments, and exercises aimed at improving testing skills.",
+  "main": "index.js",
+  "scripts": {
+    "test:cucumber": "cucumber-js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubenromeroherrero/playwright-learning-lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rubenromeroherrero/playwright-learning-lab/issues"
+  },
+  "homepage": "https://github.com/rubenromeroherrero/playwright-learning-lab#readme",
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.2.1",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.4.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.13"
+  }
+}
