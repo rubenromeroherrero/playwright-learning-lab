@@ -9,13 +9,17 @@ setDefaultTimeout(8 * 1000);
 
 let browser: ChromiumBrowser;
 let page: Page;
+declare const process: any;
 
 // Dado que Cucumber controlará la ejecución en lugar del runner de Playwright, debemos abrir y cerrar el navegador manualmente en un archivo de soporte.
 // Se ejecuta una sola vez antes de todas las pruebas
 BeforeAll(async () => {
   // Configura el atributo global para getByTestId
   selectors.setTestIdAttribute(config.use?.testIdAttribute || 'data-test');
-  browser = await chromium.launch({ headless: false }); // Cambia a true en CI/CD
+  // Cambia a true en CI/CD
+  browser = await chromium.launch({ 
+    headless: process.env.CI ? true : false 
+  });
 });
 
 // Se ejecuta antes de CADA escenario
