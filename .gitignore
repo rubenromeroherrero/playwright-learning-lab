@@ -10,4 +10,5 @@ node_modules/
 /cucumber-report.html
 /cucumber.json
 /reports
+/.vscode
 .env
