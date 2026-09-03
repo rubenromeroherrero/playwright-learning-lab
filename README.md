@@ -203,12 +203,6 @@ npm run test:cucumber -- --tags "@test"
 
 # Ejecutar un archivo .feature específico
 npm run test:cucumber -- tests/features/homepage.feature
-
-# Ejecutar un fichero cucumber y extraer los identificadores/localizadores: 
-npx playwright codegen urlToNavigate
-
-# Pausar la ejecución
-await this.page.pause();
 ````
 
 ##  🧑‍💻Herramientas de Desarrollo y Depuración
