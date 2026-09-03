@@ -11,8 +11,8 @@ export class InventoryPage {
     
     //Navigations
     async navigateToInventoryPage() {
-        await expect(this.page, 'La URL no pertenece a la del inventario').toHaveURL('https://www.saucedemo.com/inventory.html');
-        await expect(this.page, 'La página del inventario no tiene el título esperado').toHaveTitle('Swag Labs');
+        await expect(this.page, 'The URL does not match the one in the inventory').toHaveURL('https://www.saucedemo.com/inventory.html');
+        await expect(this.page, 'The inventory page does not have the expected title').toHaveTitle('Swag Labs');
     }
 
     //Actions

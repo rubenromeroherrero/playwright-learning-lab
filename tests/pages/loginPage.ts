@@ -22,15 +22,15 @@ export class LoginPage {
 
     //Actions
     async enterEmail(email: string) {
-        await expect (this.emailInput, 'El campo no es editable').toBeEditable();
+        await expect (this.emailInput, 'This email field is not editable').toBeEditable();
         await this.emailInput.fill(email);
-        await expect (this.emailInput, 'El campo email no tiene el valor introducido').toHaveValue(email)
+        await expect (this.emailInput, 'The email field does not contain the entered value').toHaveValue(email)
     }
 
     async enterPassword(password: string) {
-        await expect (this.passwordInput, 'El campo no es editable').toBeEditable();
+        await expect (this.passwordInput, 'This password field is not editable').toBeEditable();
         await this.passwordInput.fill(password);
-        await expect (this.passwordInput, 'El campo password no tiene el valor introducido').toHaveValue(password)
+        await expect (this.passwordInput, 'The password field does not contain the entered value').toHaveValue(password)
     }
 
     async selectButton(nameOfButton: string) {
@@ -39,10 +39,10 @@ export class LoginPage {
 
     //Assertions
     async verifyPageTitle() {
-        await expect(this.page, 'El título de la web de Sauce Labs no es el esperado').toHaveTitle('Swag Labs');
+        await expect(this.page, 'The title of the Sauce Labs website is not the expected').toHaveTitle('Swag Labs');
     }
 
     async verifyInitialLoginButtonState() {
-        await expect(this.loginButton, 'El botón está deshabilitado y debería estar habilitado').toBeEnabled();
+        await expect(this.loginButton, 'The button is disabled and should be enabled').toBeEnabled();
     }
 }
