@@ -4,8 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'tests/features/step-definitions/**'
       - 'tests/features/**'
+      - 'cucumber.json'
+      - 'package.json'
+      - '.github/workflows/playwright.yml'
   pull_request:
     branches: [ main ]
 
@@ -37,3 +39,4 @@ jobs:
           path: reports/
           retention-days: 30
           if-no-files-found: warn
+          
