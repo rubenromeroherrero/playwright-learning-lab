@@ -88,7 +88,10 @@ npm init playwright@latest
 ---
 
 ##  ⚙️ Configuración BDD (Playwright + Cucumber)
-Para integrar Cucumber sobre el proyecto de Playwright se agregaron los paquetes @cucumber/cucumber y tsx. La ejecución se gestiona mediante el archivo cucumber.json:
+Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no mediante el runner nativo de Playwright, se requiere la integración de tsx (TypeScript Execute) para transpilar e interpretar los archivos .ts al vuelo sin necesidad de un paso previo de compilación (tsc).
+- @cucumber/cucumber: Framework encargado de parsear las características Gherkin (.feature) y mapear los pasos a código TypeScript.
+- tsx: Cargador de módulos registrado dentro de la configuración de Cucumber mediante la propiedad requireModule, lo que permite ejecutar directamente los step definitions y hooks escritos en TypeScript.
+
 ```text
 {
     "default": {
