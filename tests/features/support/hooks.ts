@@ -23,7 +23,6 @@ BeforeAll(async () => {
 
 // Se ejecuta antes de CADA escenario
 Before(async function () {
-  //const context = await browser.newContext();
   const context = await browser.newContext({
     //Configurar la URL de pruebas
     baseURL: config.use?.baseURL
