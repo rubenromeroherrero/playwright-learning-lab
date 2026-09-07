@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { ERROR_MESSAGES } from './constants/errorMessages';
+import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from './constants/typeOfUsers';
 
 export class LoginPage {
 
@@ -25,15 +26,15 @@ export class LoginPage {
 
     //Actions
     async enterEmail(email: string) {
-        await expect (this.emailInput, 'This email field is not editable').toBeEditable();
-        await this.emailInput.fill(email);
-        await expect (this.emailInput, 'The email field does not contain the entered value').toHaveValue(email)
+        await expect(this.emailInput, 'This email field is not editable').toBeEditable();
+        await this.emailInput.fill(this.selectTypeOfUser(email));
+        await expect (this.emailInput, 'The email field does not contain the entered value').toHaveValue(this.selectTypeOfUser(email))
     }
 
     async enterPassword(password: string) {
         await expect (this.passwordInput, 'This password field is not editable').toBeEditable();
-        await this.passwordInput.fill(password);
-        await expect (this.passwordInput, 'The password field does not contain the entered value').toHaveValue(password)
+        await this.passwordInput.fill(this.selectTypeOfPassword(password));
+        await expect (this.passwordInput, 'The password field does not contain the entered value').toHaveValue(this.selectTypeOfPassword(password))
     }
 
     async selectButton(nameOfButton: string) {
@@ -63,8 +64,46 @@ export class LoginPage {
             case 'wrong password':
             case 'wrong user and password':
                 return ERROR_MESSAGES.INVALID_CREDENTIALS;
+            case 'empty user':
+                return ERROR_MESSAGES.REQUIRED_USERNAME;
+            case 'empty password':
+                return ERROR_MESSAGES.REQUIRED_PASSWORD;
             default:
-                throw new Error(`Unknown error`);
+                throw new Error(`The error message is not registered`);
+        }
+    }
+
+    private selectTypeOfUser(email: string): string {
+        switch (email) {
+            case 'standard user':
+                return TYPE_OF_USERS.STANDARD_USER;
+            case 'performance user':
+                return TYPE_OF_USERS.PERFORMANCE_USER;
+            case 'visual user':
+                return TYPE_OF_USERS.VISUAL_USER;
+            case 'locked out user':
+                return TYPE_OF_USERS.LOCKED_OUT_USER;
+            case 'invalid user':
+                return TYPE_OF_USERS.INVALID_USER;
+            case 'wrong user':
+                return TYPE_OF_USERS.WRONG_USER;
+            case 'empty user':
+                return TYPE_OF_USERS.EMPTY_USER;
+            default:
+                throw new Error(`The user is not registered`);
+        }
+    }
+
+        private selectTypeOfPassword(password: string): string {
+        switch (password) {
+            case 'generic password':
+                return TYPE_OF_PASSWORDS.GENERIC_PASSWORD;
+            case 'wrong password':
+                return TYPE_OF_PASSWORDS.WRONG_PASSWORD;
+            case 'empty password':
+                return TYPE_OF_PASSWORDS.EMPTY_PASSWORD;
+            default:
+                throw new Error(`The password is not registered`);
         }
     }
 }
