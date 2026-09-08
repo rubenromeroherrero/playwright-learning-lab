@@ -9,10 +9,8 @@ Given('the {string} is logged into the Swag Labs', async function (email: string
 
 When('the user selects the {string} icon in the footer', async function (socialMediaOption: string) {
     await this.pageManager.inventoryPage.selectSocialMediaOption(socialMediaOption);
-    //await this.page.pause();
 });
 
 Then('the user should be redirected to expected {string} url in a new tab', async function (socialMediaOption: string) {
     await this.pageManager.inventoryPage.verifySocialMediaRedirect(socialMediaOption);
-    //await this.page.pause();
 });
