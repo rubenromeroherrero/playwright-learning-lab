@@ -36,14 +36,15 @@ El propósito de este proyecto es servir como un espacio de práctica y referenc
 ```text
 playwright-learning-lab/
 ├── tests/
-│   ├── features/                # Escenarios BDD
-│   │   ├── step-definitions/    # Definición de pasos (Gherkin -> TS)
-│   │   ├── support/             # Hooks y gestión del navegador Playwright
-│   │   └── *.feature            # Archivos de historias/escenarios Gherkin
-│   ├── pages/                   # Page Object Models (POM)
-│   └── *.spec.ts                # Pruebas nativas con Playwright Test Runner
-├── cucumber.json                # Configuración del CLI de Cucumber
-├── playwright.config.ts         # Configuración global de Playwright
+│   ├── constants/             # Constantes globales, tipos y mensajes de error
+│   ├── features/              # Archivos y configuración de Cucumber BDD
+│   │   ├── scenarios/         # Archivos .feature (historias/escenarios Gherkin)
+│   │   ├── step-definitions/  # Definición de pasos (Gherkin -> TS)
+│   │   └── support/           # Hooks y gestión del navegador Playwright
+│   ├── pages/                 # Page Object Models (POM) y PageManager
+│   └── utils/                 # Utilidades generales y variables de entorno
+├── cucumber.json              # Configuración del CLI de Cucumber
+├── playwright.config.ts       # Configuración global de Playwright
 └── package.json
 ````
 
