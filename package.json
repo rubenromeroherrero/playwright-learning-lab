@@ -4,7 +4,11 @@
   "description": "A personal project to practice and explore Playwright for end-to-end testing of web applications. Includes examples, experiments, and exercises aimed at improving testing skills.",
   "main": "index.js",
   "scripts": {
-    "test:cucumber": "cucumber-js --require tsx"
+    "test:cucumber": "cucumber-js --require tsx",
+    "test:chromium": "cross-env BROWSER=chromium cucumber-js --require tsx",
+    "test:firefox": "cross-env BROWSER=firefox cucumber-js --require tsx",
+    "test:webkit": "cross-env BROWSER=webkit cucumber-js --require tsx",
+    "test:allBrowsers": "npm run test:chromium && npm run test:firefox --require tsx"
   },
   "repository": {
     "type": "git",
@@ -22,8 +26,8 @@
     "@cucumber/cucumber": "^13.2.1",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.4.1",
+    "cross-env": "^10.1.0",
     "multiple-cucumber-html-reporter": "^4.3.0",
-    "ts-node": "^10.9.2",
     "tsx": "^4.23.13"
   }
 }

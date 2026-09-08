@@ -15,6 +15,10 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # Evita que si falla el test en Chromium se cancele inmediatamente el trabajo de Firefox.
+      matrix: # Genera 2 ejecuciones paralelas simultáneas (chromium y firefox).
+        browser: [chromium, firefox] # Posibilidad de añadir webkit
     steps:
       - uses: actions/checkout@v4
 
@@ -25,17 +29,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        # Instala únicamente el navegador que necesita este job especifico en lugar de todos
+      - name: Install Playwright Browser (${{ matrix.browser }})
+        run: npx playwright install ${{ matrix.browser }} --with-deps
 
       - name: Run Playwright tests
-        run: npm run test:cucumber
+        run: npm run test:${{ matrix.browser }}
 
       - name: Upload Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-report
+          name: cucumber-report-${{ matrix.browser }} # Evita que los reportes de un navegador sobrescriban a los del otro al subir los resultados a GitHub.
           path: reports/
           retention-days: 30
           if-no-files-found: warn

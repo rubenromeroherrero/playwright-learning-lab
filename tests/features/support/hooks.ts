@@ -1,12 +1,12 @@
 import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } from '@cucumber/cucumber';
-import { ChromiumBrowser, Page, chromium, selectors } from '@playwright/test';
-import config from '../../../playwright.config.ts';
+import { Browser, Page, chromium, firefox, webkit, selectors } from '@playwright/test';
+import config from '../../../playwright.config';
 import { PageManager } from '../../pages/pageManager';
 
-// Configura el timeout global para todos los pasos (ejemplo: 20 segundos)
+// Configura el timeout global para todos los pasos (ejemplo: 8 segundos)
 setDefaultTimeout(8 * 1000);
 
-let browser: ChromiumBrowser;
+let browser: Browser;
 let page: Page;
 declare const process: any;
 
@@ -15,10 +15,22 @@ declare const process: any;
 BeforeAll(async () => {
   // Configura el atributo global para getByTestId
   selectors.setTestIdAttribute(config.use?.testIdAttribute || 'data-test');
+
+  const browserType = process.env.BROWSER || 'chromium';
   // Cambia a true el headless en CI/CD
-  browser = await chromium.launch({ 
-    headless: process.env.CI ? true : false 
-  });
+  const headless = process.env.CI ? true : false;
+
+  switch (browserType.toLowerCase()) {
+    case 'firefox':
+      browser = await firefox.launch({ headless });
+      break;
+    case 'webkit':
+      browser = await webkit.launch({ headless });
+      break;
+    default:
+      browser = await chromium.launch({ headless });
+      break;
+  }
 });
 
 // Se ejecuta antes de CADA escenario

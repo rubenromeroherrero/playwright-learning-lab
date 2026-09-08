@@ -40,7 +40,7 @@ playwright-learning-lab/
 │   ├── features/              # Archivos y configuración de Cucumber BDD
 │   │   ├── scenarios/         # Archivos .feature (historias/escenarios Gherkin)
 │   │   ├── step-definitions/  # Definición de pasos (Gherkin -> TS)
-│   │   └── support/           # Hooks y gestión del navegador Playwright
+│   │   └── support/           # Hooks y gestión multinavegador de Playwright
 │   ├── pages/                 # Page Object Models (POM) y PageManager
 │   └── utils/                 # Utilidades generales y variables de entorno
 ├── cucumber.json              # Configuración del CLI de Cucumber
@@ -50,8 +50,8 @@ playwright-learning-lab/
 
 ##  ⚙️ Configuración Global de Playwright
 En el archivo playwright.config.ts se han definido ajustes globales clave para agilizar el desarrollo de las pruebas:
-- baseURL: Se define la URL base (https://www.saucedemo.com/) para utilizar rutas relativas (como await page.goto('/')) sin declararla manualmente en cada step o test.
-- testIdAttribute: Se adapta el identificador de test por defecto a data-test (testIdAttribute: 'data-test'), ajustándose al atributo utilizado por la aplicación bajo prueba.
+- baseURL: URL base (https://www.saucedemo.com/) para utilizar rutas relativas (como await page.goto('/')).
+- testIdAttribute: Se adapta el identificador de test por defecto a data-test (testIdAttribute: 'data-test').
 ```text
 // playwright.config.ts (extracto)
 use: {
@@ -89,9 +89,13 @@ npm init playwright@latest
 ---
 
 ##  ⚙️ Configuración BDD (Playwright + Cucumber)
-Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no mediante el runner nativo de Playwright, se requiere la integración de tsx (TypeScript Execute) para transpilar e interpretar los archivos .ts al vuelo sin necesidad de compilación previa.
-- @cucumber/cucumber: Framework encargado de parsear las características Gherkin (.feature) y mapear los pasos a código TypeScript.
-- tsx: Cargador de módulos registrado dentro de cucumber.json mediante la propiedad requireModule.
+Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no mediante el runner nativo de Playwright, se requiere la integración de tsx (TypeScript Execute) para transpilar e interpretar los archivos .ts al vuelo.
+- tsx: Necesario (es el ejecutor de TypeScript que estás invocando en los scripts de Cucumber).
+- @cucumber/cucumber: Necesario (framework BDD).
+- @playwright/test: Necesario (motor de automatización).
+- @types/node: Necesario para los tipos de process.env y utilidades de Node.
+- cross-env: Necesario para pasar variables como BROWSER=chromium de forma multiplataforma.
+- multiple-cucumber-html-reporter: Necesario si generas los reportes HTML visuales a partir del JSON de Cucumber.
 
 ```text
 {
@@ -119,45 +123,48 @@ Dado que los escenarios BDD se ejecutan a través del CLI de Cucumber y no media
 ````
 
 ##  🖥️ Gestión del Ciclo de Vida (tests/features/support/hooks.ts)
+La gestión de navegadores se realiza de forma dinámica mediante la variable de entorno BROWSER, permitiendo conmutar entre Chromium, Firefox y WebKit.
 - El ciclo de vida del navegador
 - La configuración del timeout global para los tests
 - El seteo del atributo de los data-testid, por 'data-test'
 - Gestor de páginas (pageManager)
 ```text
-// Configura el timeout global para todos los pasos (ejemplo: 20 segundos)
 setDefaultTimeout(8 * 1000);
 
-let browser: ChromiumBrowser;
+let browser: Browser;
 let page: Page;
 declare const process: any;
 
-// Dado que Cucumber controlará la ejecución en lugar del runner de Playwright, debemos abrir y cerrar el navegador manualmente en un archivo de soporte.
-// Se ejecuta una sola vez antes de todas las pruebas
 BeforeAll(async () => {
-  // Configura el atributo global para getByTestId
   selectors.setTestIdAttribute(config.use?.testIdAttribute || 'data-test');
-  // Cambia a true el headless en CI/CD
-  browser = await chromium.launch({ 
-    headless: process.env.CI ? true : false 
-  });
+
+  const browserType = process.env.BROWSER || 'chromium';
+  const headless = process.env.CI ? true : false;
+
+  switch (browserType.toLowerCase()) {
+    case 'firefox':
+      browser = await firefox.launch({ headless });
+      break;
+    case 'webkit':
+      browser = await webkit.launch({ headless });
+      break;
+    default:
+      browser = await chromium.launch({ headless });
+      break;
+  }
 });
 
-// Se ejecuta antes de CADA escenario
 Before(async function () {
-  //const context = await browser.newContext();
   const context = await browser.newContext({
     //Configurar la URL de pruebas
     baseURL: config.use?.baseURL
   });
 
   this.page = await context.newPage();
-  // Inicializas el PageManager y lo guardas en this.pageManager
   this.pageManager = new PageManager(this.page);
 });
 
-// Se ejecuta después de CADA escenario
 After(async function (scenario) {
-  // Tomar captura de pantalla si el escenario falla
   if (scenario.result?.status === Status.FAILED) {
     const image = await this.page.screenshot();
     await this.attach(image, 'image/png');
@@ -165,11 +172,9 @@ After(async function (scenario) {
   await this.page.close();
 });
 
-// Se ejecuta una sola vez al terminar todas las pruebas
 AfterAll(async () => {
   await browser.close();
 });
-
 ````
 
 ℹ️ Extensión de VS Code
@@ -182,15 +187,17 @@ Para habilitar el salto de definiciones (Ctrl + Clic / F12) en los archivos .fea
 ````
 
 ##  🧪 Comandos de Ejecución
+Puedes ejecutar la suite de pruebas seleccionando el navegador específico o ejecutando la suite completa mediante los scripts definidos en el package.json utilizando cross-env:
+
 Pruebas Nativas de Playwright
 ```text
-# Ejecutar todas las pruebas nativas en modo headless
+# Ejecutar todas las pruebas nativas
 npx playwright test
 
 # Ejecutar con interfaz gráfica (UI Mode)
 npx playwright test --ui
 
-# Ver reporte de Playwright
+# Ver reporte nativo de Playwright
 npx playwright show-report
 ````
 
@@ -204,6 +211,15 @@ npm run test:cucumber -- --tags "@test"
 
 # Ejecutar un archivo .feature específico
 npm run test:cucumber -- tests/features/homepage.feature
+
+# Para ejecutar en local en Firefox
+BROWSER=firefox npx cucumber-js
+
+# Para ejecutar en local en WebKit (Safari)
+BROWSER=webkit npx cucumber-js
+
+# Para ejecutar en local en Chromium
+BROWSER=chromium npx cucumber-js
 ````
 
 ##  🧑‍💻Herramientas de Desarrollo y Depuración
