@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { ERROR_MESSAGES } from './constants/errorMessages';
-import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from './constants/typeOfUsers';
+import { ERROR_MESSAGES } from '../constants/errorMessages';
+import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from '../constants/typeOfUsers';
 
 export class LoginPage {
 

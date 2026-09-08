@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { LoginPage } from './loginPage';
-import { InventoryPage } from './inventoryPage';
+import { LoginPage } from './login';
+import { InventoryPage } from './inventory';
 
 export class PageManager {
   private readonly page: Page;
