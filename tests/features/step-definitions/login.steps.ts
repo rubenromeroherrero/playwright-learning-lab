@@ -25,5 +25,4 @@ Then('the user should be redirected to the Inventory page', async function () {
 
 Then('an error message for {string} should be displayed', async function (expectedMessage: string) {
   await this.pageManager.loginPage.verifyErrorMessage(expectedMessage);
-  await this.page.pause();
 });

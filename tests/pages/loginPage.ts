@@ -41,6 +41,10 @@ export class LoginPage {
         if (nameOfButton === "Login") await this.loginButton.click() ?? '';
     }
 
+    async selectLoginButton() {
+        await this.loginButton.click();
+    }
+
     //Assertions
     async verifyPageTitle() {
         await expect(this.page, 'The title of the Sauce Labs website is not the expected').toHaveTitle('Swag Labs');

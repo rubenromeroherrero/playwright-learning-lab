@@ -1,0 +1,13 @@
+Feature: Inventory Page on Swag Labs
+
+    @footer
+    Scenario Outline: Verify social media footer links redirect to correct external pages
+        Given the "standard user" is logged into the Swag Labs
+        When the user selects the "<social_media>" icon in the footer
+        Then the user should be redirected to expected "<social_media>" url in a new tab
+
+        Examples:
+            | social_media |
+            | Twitter      |
+            | Facebook     |
+            | LinkedIn     |
