@@ -4,7 +4,7 @@
   "description": "A personal project to practice and explore Playwright for end-to-end testing of web applications. Includes examples, experiments, and exercises aimed at improving testing skills.",
   "main": "index.js",
   "scripts": {
-    "test:cucumber": "cucumber-js"
+    "test:cucumber": "cucumber-js --require-module ts-node/register"
   },
   "repository": {
     "type": "git",
