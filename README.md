@@ -204,6 +204,7 @@ npx playwright show-report
 Pruebas BDD con Cucumber
 ```text
 # Ejecutar todas las features de Cucumber
+# Se usa cucumber.json y se genera el reporte nativo de Cucumber en reports/cucumber-report.html.
 npm run test:cucumber
 
 # Ejecutar escenarios filtrados por etiqueta (Ejemplo: @test)
