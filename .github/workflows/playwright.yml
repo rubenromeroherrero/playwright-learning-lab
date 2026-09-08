@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'tests/features/**'
+      - 'tests/**'
       - 'cucumber.json'
       - 'package.json'
       - '.github/workflows/playwright.yml'
