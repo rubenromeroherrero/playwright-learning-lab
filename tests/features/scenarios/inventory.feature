@@ -1,5 +1,11 @@
 Feature: Inventory Page on Swag Labs
 
+    @auth @logout
+    Scenario: Successful logout from inventory page
+        Given the "standard user" is logged into the Swag Labs
+        When the user logs out from the side menu
+        Then the user should be redirected to the login page
+
     @footer
     Scenario Outline: Verify social media footer links redirect to correct external pages
         Given the "standard user" is logged into the Swag Labs

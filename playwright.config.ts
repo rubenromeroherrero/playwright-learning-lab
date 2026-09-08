@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { URLS } from './tests/constants/urls';
 
 /**
  * Read environment variables from file.
@@ -27,7 +28,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
-    baseURL: 'https://www.saucedemo.com/',
+    baseURL: URLS.BASE_URL,
     // Configuración del nombre de los data-testid que quieran poner en el proyecto los devs
     testIdAttribute: 'data-test',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */

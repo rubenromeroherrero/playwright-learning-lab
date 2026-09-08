@@ -1,19 +1,20 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { ERROR_MESSAGES } from '../constants/errorMessages';
 import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from '../constants/typeOfUsers';
+import { URLS } from '../constants/urls';
 
 export class LoginPage {
 
     //Atributtes
     readonly page: Page;
-    readonly emailInput: Locator;
+    readonly usernameInput: Locator;
     readonly passwordInput: Locator;
     readonly loginButton: Locator; 
     readonly errorMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.emailInput = page.getByTestId('username');
+        this.usernameInput = page.getByTestId('username');
         this.passwordInput = page.getByTestId('password');
         this.loginButton = page.getByTestId('login-button');
         this.errorMessage = page.getByTestId('error');
@@ -25,16 +26,22 @@ export class LoginPage {
     }
 
     //Actions
-    async enterEmail(email: string) {
-        await expect(this.emailInput, 'This email field is not editable').toBeEditable();
-        await this.emailInput.fill(this.selectTypeOfUser(email));
-        await expect (this.emailInput, 'The email field does not contain the entered value').toHaveValue(this.selectTypeOfUser(email))
+    async enterUsername(username: string) {
+        await expect(this.usernameInput, 'This username field is not editable').toBeEditable();
+        await this.usernameInput.fill(this.selectTypeOfUser(username));
+        await expect (this.usernameInput, 'The username field does not contain the entered value').toHaveValue(this.selectTypeOfUser(username))
     }
 
     async enterPassword(password: string) {
         await expect (this.passwordInput, 'This password field is not editable').toBeEditable();
         await this.passwordInput.fill(this.selectTypeOfPassword(password));
         await expect (this.passwordInput, 'The password field does not contain the entered value').toHaveValue(this.selectTypeOfPassword(password))
+    }
+
+    async login(username: string, password: string) {
+        await this.enterUsername(username);
+        await this.enterPassword(password);
+        await this.selectLoginButton();
     }
 
     async selectButton(nameOfButton: string) {
@@ -48,6 +55,11 @@ export class LoginPage {
     //Assertions
     async verifyPageTitle() {
         await expect(this.page, 'The title of the Sauce Labs website is not the expected').toHaveTitle('Swag Labs');
+    }
+
+    async verifyLoginPageIsDisplayed() {
+        await expect(this.page, 'The title of the Sauce Labs website is not the expected').toHaveTitle('Swag Labs');
+        await expect(this.page, 'The URL of login is not the expected').toHaveURL(URLS.BASE_URL);
     }
 
     async verifyInitialLoginButtonState() {
@@ -77,8 +89,8 @@ export class LoginPage {
         }
     }
 
-    private selectTypeOfUser(email: string): string {
-        switch (email) {
+    private selectTypeOfUser(username: string): string {
+        switch (username) {
             case 'standard user':
                 return TYPE_OF_USERS.STANDARD_USER;
             case 'performance user':
