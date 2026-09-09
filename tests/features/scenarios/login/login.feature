@@ -29,10 +29,10 @@ Feature: User Login on Swag Labs
         When the user enters "<username>" in the username field
         And the user enters "<password>" in the password field
         And the user selects the "Login" button
-        Then an error message for "<error path>" should be displayed
+        Then an error message for "<errorPath>" should be displayed
 
         Examples:
-            | username      | password         | error path              |
+            | username      | password         | errorPath               |
             | invalid user  | generic password | wrong user              |
             | standard user | wrong password   | wrong password          |
             | wrong user    | wrong password   | wrong user and password |
@@ -43,9 +43,9 @@ Feature: User Login on Swag Labs
         When the user enters "<username>" in the username field
         And the user enters "<password>" in the password field
         When the user selects the "Login" button
-        Then an error message for "<error path>" should be displayed
+        Then an error message for "<errorPath>" should be displayed
 
         Examples:
-            | username      | password         | error path     |
+            | username      | password         | errorPath      |
             | empty user    | generic password | empty user     |
             | standard user | empty password   | empty password |

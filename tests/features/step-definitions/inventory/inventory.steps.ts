@@ -1,4 +1,4 @@
-import { Given, When, Then, Before } from '@cucumber/cucumber';
+import { When, Then } from '@cucumber/cucumber';
 
 When('the user selects the {string} icon in the footer', async function (socialMediaOption: string) {
     await this.pageManager.inventoryPage.selectSocialMediaOption(socialMediaOption);

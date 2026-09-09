@@ -1,4 +1,4 @@
-import { Given, When, Then, Before } from '@cucumber/cucumber';
+import { Given, When, Then } from '@cucumber/cucumber';
 
 Given('the user is on the Swag Labs login page', async function () {
   await this.pageManager.loginPage.navigateToUrl();

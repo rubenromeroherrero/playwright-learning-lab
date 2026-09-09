@@ -1,8 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { BrowserUtils } from '../utils/browserUtils';
 import { ERROR_MESSAGES } from '../constants/errorMessages';
 import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from '../constants/typeOfUsers';
 import { URLS } from '../constants/urls';
-import { BrowserUtils } from '../utils/browserUtils';
 
 export class LoginPage {
 

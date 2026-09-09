@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { SOCIAL_MEDIA_URL } from '../constants/footerLinks';
 import { BrowserUtils } from '../utils/browserUtils';
+import { SOCIAL_MEDIA_URL } from '../constants/footerLinks';
 import { URLS } from '../constants/urls';
 
 export class InventoryPage {
