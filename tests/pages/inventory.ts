@@ -12,6 +12,8 @@ export class InventoryPage {
     readonly linkedinIcon: Locator;
     readonly menuButton: Locator;
     readonly logoutButton: Locator; 
+    readonly inventoryItem: Locator; 
+    readonly filterDropdown: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -20,6 +22,8 @@ export class InventoryPage {
         this.linkedinIcon = this.page.getByTestId('social-linkedin');
         this.menuButton = this.page.locator('#react-burger-menu-btn');
         this.logoutButton = this.page.getByTestId('logout-sidebar-link');
+        this.inventoryItem = this.page.getByTestId('inventory-item');
+        this.filterDropdown = this.page.getByTestId('product-sort-container');
     }
     
     //Navigations
@@ -27,6 +31,26 @@ export class InventoryPage {
     //Actions
     async selectSocialMediaOption(socialMediaOption: string) {
         await this.selectTypeOfSocialMedia(socialMediaOption);
+    }
+
+    async selectFilterOption(filterOption: string) {
+        await this.filterDropdown.selectOption({ label: filterOption });
+    }
+
+    async getInventoryItems(): Promise<{ name: string; price: string }[]> {
+        try {
+            return await this.inventoryItem.evaluateAll(items => {
+                return items.map(item => {
+                    const name = item.querySelector('[data-test="inventory-item-description"] a')?.textContent?.trim() || '';
+                    const rawPrice = item.querySelector('[data-test="inventory-item-description"] [data-test="inventory-item-price"]')?.textContent || '';
+                    const price = rawPrice.replace('$', '').trim();
+                    
+                    return { name, price };
+                });
+            });
+        } catch (error) {
+            throw new Error(`The inventory-item element did not appear on the current page.`);
+        }
     }
 
     async selectMenuButton() {
@@ -55,6 +79,21 @@ export class InventoryPage {
             },
             expectedUrl
         );
+    }
+
+    async verifyInventoryItemsOrder(filterOption: string) {
+        const isAscending = this.getFilterOption(filterOption);
+        const items = await this.getInventoryItems(); 
+
+        const isOrderCorrect = items.every((item, index) => {
+            if (index === items.length - 1) return true;
+            
+            const currentPrice = parseFloat(item.price);
+            const nextPrice = parseFloat(items[index + 1].price);
+            
+            return isAscending ? currentPrice <= nextPrice : currentPrice >= nextPrice;
+        });
+        await expect(isOrderCorrect, `The inventory items are not sorted correctly for the filter option: ${filterOption}`).toBe(true);
     }
 
     async verifyAccessibilityOnLoginPage() {
@@ -89,6 +128,17 @@ export class InventoryPage {
                 return SOCIAL_MEDIA_URL.LINKEDIN;
             default:
                 throw new Error(`The social media URL is not registered`);
+        }
+    }
+
+    private getFilterOption(filterOption: string):boolean {
+        switch (filterOption) {
+            case 'Price (low to high)':
+                return true;
+            case 'Price (high to low)':
+                return false;
+            default:
+                throw new Error(`The filter option is not registered`);
         }
     }
 }

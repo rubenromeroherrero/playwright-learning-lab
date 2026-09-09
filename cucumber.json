@@ -14,7 +14,7 @@
             "tsx"
         ],
         "format": [
-            "progress-bar",
+            "progress",
             "html:reports/cucumber-report.html",
             "json:reports/cucumber-report.json"
         ]
