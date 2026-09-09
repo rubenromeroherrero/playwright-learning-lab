@@ -2,6 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { ERROR_MESSAGES } from '../constants/errorMessages';
 import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from '../constants/typeOfUsers';
 import { URLS } from '../constants/urls';
+import { AxeBuilder } from '@axe-core/playwright';
 
 export class LoginPage {
 
@@ -71,6 +72,14 @@ export class LoginPage {
         await expect(this.errorMessage, `The error message for ${expectedMessage} is not the expected`).toHaveText(this.checkErrorMessageValue(expectedMessage));
     }
 
+    async verifyAccessibilityOnLoginPage() {
+        const accessibilityScanResults = await new AxeBuilder({ page: this.page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+
+        expect(accessibilityScanResults.violations).toEqual([]);
+    }
+    
     //Private functions
     private checkErrorMessageValue(expectedMessage: string): string {
         switch (expectedMessage) {

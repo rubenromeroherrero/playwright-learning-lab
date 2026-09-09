@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/rubenromeroherrero/playwright-learning-lab#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@cucumber/cucumber": "^13.2.1",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.4.1",
