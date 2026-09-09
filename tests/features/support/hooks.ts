@@ -1,13 +1,13 @@
-import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout, setWorldConstructor } from '@cucumber/cucumber';
-import { Browser, chromium, firefox, webkit, selectors } from '@playwright/test';
+import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } from '@cucumber/cucumber';
+import { Browser, Page, chromium, firefox, webkit, selectors } from '@playwright/test';
 import config from '../../../playwright.config';
-import { CustomWorld } from './custom-world';
+import { PageManager } from '../../pages/pageManager';
 
 // Configura el timeout global para todos los pasos (ejemplo: 8 segundos)
 setDefaultTimeout(8 * 1000);
-setWorldConstructor(CustomWorld);
 
 let browser: Browser;
+let page: Page;
 declare const process: any;
 
 // Dado que Cucumber controlará la ejecución en lugar del runner de Playwright, debemos abrir y cerrar el navegador manualmente en un archivo de soporte.
@@ -35,7 +35,14 @@ BeforeAll(async () => {
 
 // Se ejecuta antes de CADA escenario
 Before(async function () {
-  await this.init(browser, config.use?.baseURL);
+  const context = await browser.newContext({
+    //Configurar la URL de pruebas
+    baseURL: config.use?.baseURL
+  });
+
+  this.page = await context.newPage();
+  // Inicializas el PageManager y lo guardas en this.pm
+  this.pageManager = new PageManager(this.page);
 });
 
 // Se ejecuta después de CADA escenario
