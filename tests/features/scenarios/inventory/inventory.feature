@@ -7,10 +7,16 @@ Feature: Inventory Page on Swag Labs
         Then the user should be redirected to the login page
 
     @filter
-    Scenario: Filter inventory items by price from low to high
+    Scenario Outline: Filter inventory items by price
         Given the "standard user" is logged into the Swag Labs
-        When the user selects "Price (low to high)" from the product sort dropdown
-        Then the inventory items should be ordered by price from "Price (low to high)"
+        When the user selects "<filterOption>" from the product sort dropdown
+        Then the inventory items should be ordered by price from "<filterOption>"
+
+        Examples:
+            | filterOption        |
+            | Price (low to high) |
+            | Price (high to low) |
+
 
     @footer
     Scenario Outline: Verify social media footer links redirect to correct external pages
