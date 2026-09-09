@@ -96,7 +96,7 @@ export class InventoryPage {
         await expect(isOrderCorrect, `The inventory items are not sorted correctly for the filter option: ${filterOption}`).toBe(true);
     }
 
-    async verifyAccessibilityOnLoginPage() {
+    async verifyAccessibilityOnInventoryPage() {
         await BrowserUtils.checkPageAccessibility(this.page);
     }
     
