@@ -57,6 +57,11 @@ export class InventoryPage {
         );
     }
 
+    async verifyAccessibilityOnLoginPage() {
+        await BrowserUtils.checkPageAccessibility(this.page);
+    }
+    
+
     //Private functions
     private async selectTypeOfSocialMedia(socialMediaOption: string) {
         switch (socialMediaOption) {

@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { ERROR_MESSAGES } from '../constants/errorMessages';
 import { TYPE_OF_PASSWORDS, TYPE_OF_USERS } from '../constants/typeOfUsers';
 import { URLS } from '../constants/urls';
-import { AxeBuilder } from '@axe-core/playwright';
+import { BrowserUtils } from '../utils/browserUtils';
 
 export class LoginPage {
 
@@ -73,11 +73,7 @@ export class LoginPage {
     }
 
     async verifyAccessibilityOnLoginPage() {
-        const accessibilityScanResults = await new AxeBuilder({ page: this.page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        .analyze();
-
-        expect(accessibilityScanResults.violations).toEqual([]);
+        await BrowserUtils.checkPageAccessibility(this.page);
     }
     
     //Private functions
