@@ -1,7 +1,10 @@
-import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } from '@cucumber/cucumber';
+import { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout, setWorldConstructor } from '@cucumber/cucumber';
 import { Browser, Page, chromium, firefox, webkit, selectors } from '@playwright/test';
 import config from '../../../playwright.config';
 import { PageManager } from '../../pages/pageManager';
+import { CustomWorld } from './customWorld';
+
+setWorldConstructor(CustomWorld);
 
 // Configura el timeout global para todos los pasos (ejemplo: 8 segundos)
 setDefaultTimeout(8 * 1000);
@@ -34,7 +37,7 @@ BeforeAll(async () => {
 });
 
 // Se ejecuta antes de CADA escenario
-Before(async function () {
+Before(async function (this: CustomWorld) {
   const context = await browser.newContext({
     //Configurar la URL de pruebas
     baseURL: config.use?.baseURL
@@ -46,7 +49,7 @@ Before(async function () {
 });
 
 // Se ejecuta después de CADA escenario
-After(async function (scenario) {
+After(async function (this: CustomWorld, scenario) {
   // Tomar captura de pantalla si el escenario falla
   if (scenario.result?.status === Status.FAILED) {
     const image = await this.page.screenshot();
