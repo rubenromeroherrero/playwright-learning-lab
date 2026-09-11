@@ -9,6 +9,7 @@ Given('the user is on the Swag Labs login page', async function (this: CustomWor
 Given('the {string} is logged into the Swag Labs', async function (this: CustomWorld, username: string) {
     await this.pageManager.loginPage.navigateToUrl();
     await this.pageManager.loginPage.login(username, 'generic password');
+    await this.pageManager.inventoryPage.verifyInventoryPageIsDisplayed();
 });
 
 When('the user enters {string} in the username field', async function (this: CustomWorld, username: string) {

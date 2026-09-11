@@ -17,7 +17,7 @@ export class InventoryPage {
 
     constructor(page: Page) {
         this.page = page;
-        this.twitterIcon = this.page.getByTestId('social-twitter');
+        this.twitterIcon = this.page.getByTestId('social-x');
         this.facebookIcon = this.page.getByTestId('social-facebook');
         this.linkedinIcon = this.page.getByTestId('social-linkedin');
         this.menuButton = this.page.locator('#react-burger-menu-btn');
@@ -30,7 +30,19 @@ export class InventoryPage {
 
     //Actions
     async selectSocialMediaOption(socialMediaOption: string) {
-        await this.selectTypeOfSocialMedia(socialMediaOption);
+        switch (socialMediaOption) {
+            case 'Twitter':
+                await this.twitterIcon.click();
+                break;
+            case 'Facebook':
+                await this.facebookIcon.click();
+                break;
+            case 'LinkedIn':
+                await this.linkedinIcon.click();
+                break; 
+            default:
+                throw new Error(`The social media is not registered`);
+        }
     }
 
     async selectFilterOption(filterOption: string) {
@@ -102,22 +114,6 @@ export class InventoryPage {
     
 
     //Private functions
-    private async selectTypeOfSocialMedia(socialMediaOption: string) {
-        switch (socialMediaOption) {
-            case 'Twitter':
-                await this.twitterIcon.click();
-                break;
-            case 'Facebook':
-                await this.facebookIcon.click();
-                break;
-            case 'LinkedIn':
-                await this.linkedinIcon.click();
-                break; 
-            default:
-                throw new Error(`The social media is not registered`);
-        }
-    }
-
     private getExpectedSocialMediaUrl(socialMediaOption: string):string {
         switch (socialMediaOption) {
             case 'Twitter':

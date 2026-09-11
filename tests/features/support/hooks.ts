@@ -4,6 +4,7 @@ import config from '../../../playwright.config';
 import { PageManager } from '../../pages/pageManager';
 import { CustomWorld } from './customWorld';
 
+// Configura el constructor del mundo personalizado para que Cucumber lo use
 setWorldConstructor(CustomWorld);
 
 // Configura el timeout global para todos los pasos (ejemplo: 8 segundos)
